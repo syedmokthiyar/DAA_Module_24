@@ -14,24 +14,59 @@ When passing through a path cell containing a cherry, you pick it up, and the ce
 
 
 ## Algorithm
-1. 
-2. 
-3. 
-4.  
-5.   
+1. Start at (0, 0), move to (n-1, n-1) (only right or down)
+
+2. Then return back to (0, 0) (only left or up)
+
+3. Can pass through cells with 0 or 1
+
+4. Can pick cherries (1) only once (cell becomes 0 after pick)
+
+5. Avoid thorns (-1)
 
 ## Program:
-```
-/*
-To implement the program for Cherry pickup problem.
+
+Developed by: GANESH R
+
+Register Number:  212222240029
+```python
+class Solution:
+    def cherryPickup(self, grid):
+        n = len(grid) 
+        ### ADD
+        dp = [[[-1] * n for _ in range(n)] for _ in range(n)]
+        
+        def f(x1, y1, x2):
+            y2 = x1 + y1 - x2
+            if x1 < 0 or y1 < 0 or x2 < 0 or y2 < 0 or grid[x1][y1] == -1 or grid[x2][y2] == -1:
+                return float('-inf')
+            if x1 == 0 and y1 == 0 and x2 == 0 and y2 == 0:
+                return grid[0][0]
+            if dp[x1][y1][x2] != -1:
+                return dp[x1][y1][x2]
+            cherries = grid[x1][y1]
+            if x1 != x2 or y1 != y2:
+                cherries += grid[x2][y2]
+            cherries += max(
+                f(x1 - 1, y1, x2 - 1),
+                f(x1, y1 - 1, x2 - 1),
+                f(x1 - 1, y1, x2),
+                f(x1, y1 - 1, x2))
+            
+            dp[x1][y1][x2] = cherries
+            return cherries
 
 
-Developed by: 
-Register Number:  
-*/
+        result = max(0, f(n - 1, n - 1, n - 1))
+        return result
+obj=Solution()
+grid=[[0,1,-1],[1,0,-1],[1,1,1]]        
+print(obj.cherryPickup(grid))
+
 ```
 
 ## Output:
+![image](https://github.com/user-attachments/assets/c2d18537-f033-4c29-b80e-f834d7a02142)
 
 
 
